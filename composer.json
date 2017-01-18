@@ -1,0 +1,32 @@
+{
+    "authors": [
+        {
+            "email": "fikri@runcloud.io",
+            "name": "Ahmad Fikrizaman Bin Abd Rahim"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "CoolCodeMY\\YourMembershipLaravelAPI\\": "src/"
+        }
+    },
+    "description": "YourMembership.com PHP API for Laravel",
+    "keywords": [
+        "yourmembership.com",
+        "api",
+        "laravel",
+        "php"
+    ],
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "name": "coolcodemy/yourmembership-laravel-api",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=7.0.0",
+        "illuminate/support": "^5.2",
+        "illuminate/cache": "^5.2",
+        "guzzlehttp/guzzle": "~6.0"
+    },
+    "type": "library",
+    "version": "0.0.1"
+}
