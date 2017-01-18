@@ -53,6 +53,6 @@ class YourMembershipServiceProvider extends ServiceProvider
 
     public function provides()
     {
-        return [\CoolCodeMY\YourMembershipLaravelAPI\YMA::class];
+        return [\CoolCodeMY\YourMembershipLaravelAPI\YMLA::class];
     }
 }
