@@ -10,7 +10,7 @@ This package implements a PHP wrapper to work with http://www.yourmembership.com
 ### Laravel Installation (5.2+)
 
 
-***Composer Package will not work. This is WIP**
+**\*Composer Package will not work. This is WIP**
 Require this package with composer by adding the following to your composer file:
 
 ```json
