@@ -45,21 +45,41 @@ class YourController extends Controller {
     public function index(YMLA $ymla)
     {
         // Array results
-        $result = $ymla->call('AUth.Authenticate', [
+        $result = $ymla->call('Auth.Authenticate', [
             'Username' => 'email@examle.com',
             'Password' => 'password',
         ])->toArray();
         
         // JSON/Object result
-        $result = $ymla->call('AUth.Authenticate', [
+        $result = $ymla->call('Auth.Authenticate', [
             'Username' => 'email@examle.com',
             'Password' => 'password',
         ])->toJson();
+        
+        // XML result
+        $result = $ymla->call('Auth.Authenticate', [
+            'Username' => 'email@examle.com',
+            'Password' => 'password',
+        ])->toXML();
     }
     ...
 }
 ```
-### Notes on YourMembership session
+#### Notes on YourMembership session
 You don't need to generate session for authentication as this package will do it for you. The **SessionID** is saved inside Laravel cache for 15 minutes.
+
+
+####  Returning the RAW XML results from YourMembership
+This will return the results as XML and set the return header to XML for the browser to properly print valid XML.
+```php
+...
+$result = $ymla->call('Auth.Authenticate', [
+    'Username' => 'email@examle.com',
+    'Password' => 'password',
+])->toXML();
+
+return response()->xml($result);
+...
+```
 
 

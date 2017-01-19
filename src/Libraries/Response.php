@@ -23,9 +23,24 @@ class Response
         return $this->read();
     }
 
-    private function read($toArray = false)
+    public function toXML()
+    {
+        return $this->read(false, true);
+    }
+
+    /**
+     * Read the response body from the API
+     * @param  boolean $toArray Whether to return as an array
+     * @param  boolean $toXML   Whether to return as xml
+     * @return mixed            The processed read response
+     */
+    private function read($toArray = false, $toXML = false)
     {
         $xml = new \SimpleXMLElement($this->response->getbody()->getContents());
+
+        if ($toXML) {
+            return $xml;
+        }
 
         \Log::info(json_encode($xml));
 
