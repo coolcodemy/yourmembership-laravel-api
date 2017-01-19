@@ -79,8 +79,6 @@ class Request
 
         $xml = simplexml_import_dom($domParent);
 
-        \Log::info($xml->asXML());
-
         return $xml;
     }
 

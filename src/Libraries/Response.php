@@ -2,6 +2,8 @@
 
 namespace CoolCodeMY\YourMembershipLaravelAPI\Libraries;
 
+use CoolCodeMY\YourMembershipLaravelAPI\Exceptions\ResponseException;
+
 class Response
 {
     private $method;
@@ -10,7 +12,7 @@ class Response
     public function __construct($method, \GuzzleHttp\Psr7\Response $response)
     {
         $this->method   = $method;
-        $this->response = $response;
+        $this->response = new \SimpleXMLElement($response->getbody()->getContents());
     }
 
     public function toArray()
@@ -28,6 +30,21 @@ class Response
         return $this->read(false, true);
     }
 
+    public function hasError()
+    {
+        return $this->getErrCode() != 0;
+    }
+
+    public function getErrCode()
+    {
+        return (int) $this->response->ErrCode;
+    }
+
+    public function getError()
+    {
+        return (string) $this->response->ErrDesc;
+    }
+
     /**
      * Read the response body from the API
      * @param  boolean $toArray Whether to return as an array
@@ -36,14 +53,13 @@ class Response
      */
     private function read($toArray = false, $toXML = false)
     {
-        $xml = new \SimpleXMLElement($this->response->getbody()->getContents());
-
-        if ($toXML) {
-            return $xml;
+        if ($this->hasError()) {
+            throw new ResponseException($this->getError(), $this->getErrCode(), $this->method);
         }
 
-        \Log::info(json_encode($xml));
-
-        return json_decode(json_encode($xml->{$this->method}), $toArray);
+        if ($toXML) {
+            return $this->response;
+        }
+        return json_decode(json_encode($this->response->{$this->method}), $toArray);
     }
 }
