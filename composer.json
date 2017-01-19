@@ -24,6 +24,7 @@
     "require": {
         "php": ">=7.0.0",
         "illuminate/support": "^5.2",
+        "illuminate/http": "^5.2",
         "illuminate/cache": "^5.2",
         "guzzlehttp/guzzle": "~6.0"
     },

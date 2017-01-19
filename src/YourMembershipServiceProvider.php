@@ -45,7 +45,9 @@ class YourMembershipServiceProvider extends ServiceProvider
             return new \CoolCodeMY\YourMembershipLaravelAPI\YMLA(
                 app(\GuzzleHttp\Client::class),
                 app(\Illuminate\Cache\Repository::class),
+                app(\Illuminate\Http\Request::class),
                 $app['config'][$that->name]['API_KEY'],
+                $app['config'][$that->name]['SECRET_API_KEY'],
                 $app['config'][$that->name]['SA_PASSCODE']
             );
         });

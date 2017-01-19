@@ -8,14 +8,16 @@ class Request
     const END_POINT = 'https://api.yourmembership.com';
 
     private $apiKey;
+    private $secretApiKey;
     private $saPasscode;
 
     private static $sessionID;
 
-    public function __construct($apiKey, $saPasscode)
+    public function __construct($apiKey, $secretApiKey, $saPasscode)
     {
-        $this->apiKey     = $apiKey;
-        $this->saPasscode = $saPasscode;
+        $this->apiKey       = $apiKey;
+        $this->secretApiKey = $secretApiKey;
+        $this->saPasscode   = $saPasscode;
     }
 
     public function create($method, $args = [])
@@ -32,8 +34,8 @@ class Request
 
     public function createCall($method, $args = [])
     {
-        $parent = $this->getCommon();
-        $parent->addChild('SessionID', self::$sessionID);
+        $parent = $this->getCommon($method);
+        $this->addSessionToMethod($parent, $method);
 
         $call = new \SimpleXMLElement("<Call></Call>");
         $call->addAttribute('Method', $method);
@@ -42,6 +44,15 @@ class Request
         $xml = $this->merge($parent, $call);
 
         return $xml;
+    }
+
+    private function addSessionToMethod($ymParent, $method)
+    {
+        if (strpos($method, 'Sa.') !== 0) {
+            $ymParent->addChild('SessionID', self::$sessionID);
+        } else if (strpos($method, 'Sa.Auth.') === 0) {
+            $ymParent->addChild('SessionID', self::$sessionID);
+        }
     }
 
     private function addRecursiveChildren($call, $args = [])
@@ -68,17 +79,29 @@ class Request
 
         $xml = simplexml_import_dom($domParent);
 
+        \Log::info($xml->asXML());
+
         return $xml;
     }
 
-    private function getCommon()
+    private function getCommon($method)
     {
         $xml = new \SimpleXMLElement("<YourMembership></YourMembership>");
         $xml->addChild('Version', self::VERSION);
-        $xml->addChild('ApiKey', $this->apiKey);
+        $this->addSaIfAdmin($xml, $method);
         $xml->addChild('CallID', uniqid('', true));
 
         return $xml;
+    }
+
+    private function addSaIfAdmin($xml, $method)
+    {
+        if (strpos($method, 'Sa.') === 0) {
+            $xml->addChild('SaPasscode', $this->saPasscode);
+            $xml->addChild('ApiKey', $this->secretApiKey);
+        } else {
+            $xml->addChild('ApiKey', $this->apiKey);
+        }
     }
 
     public static function setSessionID($id)

@@ -12,16 +12,20 @@ class YMLA
     private $client;
     private $cache;
     private $apiKey;
+    private $secretApiKey;
     private $saPasscode;
     private $request;
+    private $illuminateRequest;
 
-    public function __construct(Client $client, Cache $cache, $apiKey, $saPasscode)
+    public function __construct(Client $client, Cache $cache, \Illuminate\Http\Request $illuminateRequest, $apiKey, $secretApiKey, $saPasscode)
     {
-        $this->client     = $client;
-        $this->cache      = $cache;
-        $this->apiKey     = $apiKey;
-        $this->saPasscode = $saPasscode;
-        $this->request    = new Request($apiKey, $saPasscode);
+        $this->client            = $client;
+        $this->cache             = $cache;
+        $this->illuminateRequest = $illuminateRequest;
+        $this->apiKey            = $apiKey;
+        $this->secretApiKey      = $secretApiKey;
+        $this->saPasscode        = $saPasscode;
+        $this->request           = new Request($apiKey, $secretApiKey, $saPasscode);
         Request::setSessionID($this->getSessionID());
     }
 
@@ -35,9 +39,10 @@ class YMLA
 
     public function getSessionID()
     {
-        $that = $this;
+        $that     = $this;
+        $cacheKey = sprintf('YMLA-SessionID-%s', $this->illuminateRequest->fingerprint());
 
-        return $this->cache->remember('YMLA-SessionID', 15, function () use ($that) {
+        return $this->cache->remember($cacheKey, 15, function () use ($that) {
             $data = $that->call('Session.Create')->toJson();
             return $data->SessionID;
         });
