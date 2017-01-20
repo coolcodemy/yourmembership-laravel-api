@@ -38,7 +38,7 @@ Publish the config for the package
 php artisan vendor:publish --provider="CoolCodeMY\YourMembershipLaravelAPI\YourMembershipServiceProvider"
 ```
 
-Fill in your **API_KEY** and **SA_PASSCODE** inside `config/yourmembership-laravel-api.php`.
+Fill in your **API_KEY**, **SECRET_API_KEY** and **SA_PASSCODE** inside `config/yourmembership-laravel-api.php`.
 
 
 ### Usage
