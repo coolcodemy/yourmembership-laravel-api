@@ -10,15 +10,23 @@ This package implements a PHP wrapper to work with http://www.yourmembership.com
 ### Laravel Installation (5.2+)
 
 
-**\*Composer Package will not work. This is WIP**
-
 Require this package with composer by adding the following to your composer file:
 
 ```json
 "require": {
-    "CoolCodeMY/YourMembershipLaravelAPI": "dev-master"
+    "CoolCodeMY/YourMembershipLaravelAPI": "^0.0.1"
 },
 ```
+
+Then run `composer update` to download the package.
+
+**Or use**
+
+```bash
+composer require coolcodemy/yourmembership-laravel-api
+```
+
+
 After updating composer, add the service provider to the `providers` array in `config/app.php`
 
 ```php
