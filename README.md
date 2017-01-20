@@ -14,7 +14,7 @@ Require this package with composer by adding the following to your composer file
 
 ```json
 "require": {
-    "CoolCodeMY/YourMembershipLaravelAPI": "^0.0.1"
+    "coolcodemy/yourmembership-laravel-api": "^0.0.1"
 },
 ```
 
