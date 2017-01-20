@@ -26,11 +26,14 @@ class YMLA
         $this->secretApiKey      = $secretApiKey;
         $this->saPasscode        = $saPasscode;
         $this->request           = new Request($apiKey, $secretApiKey, $saPasscode);
-        Request::setSessionID($this->getSessionID());
     }
 
-    public function call($method, $args = [])
+    public function call($method, $args = [], $bypassCheckSession = true)
     {
+        if ($bypassCheckSession) {
+            Request::setSessionID($this->getSessionID());
+        }
+
         $request  = $this->request->create($method, $args);
         $response = $this->client->send($request);
 
@@ -43,7 +46,7 @@ class YMLA
         $cacheKey = sprintf('YMLA-SessionID-%s', $this->illuminateRequest->fingerprint());
 
         return $this->cache->remember($cacheKey, 15, function () use ($that) {
-            $data = $that->call('Session.Create')->toJson();
+            $data = $that->call('Session.Create', [], false)->toJson();
             return $data->SessionID;
         });
     }
